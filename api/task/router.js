@@ -9,7 +9,8 @@ router.post('/', validateTask, (req, res) => {
 })
 
 router.get('/', (req, res) => {
-    res.json({ message: 'getting tasks' });
+    const tasks = Tasks.getAll();
+    res.json(tasks);
 })
 
 

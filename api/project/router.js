@@ -8,8 +8,9 @@ router.post('/', validateProject, (req, res) => {
     res.json({ message: 'posting a project' });
 })
 
-router.get('/', (req, res) => {
-    res.json({ message: 'getting projects' });
+router.get('/', async (req, res) => {
+    const projects = await Projects.getAll();
+    res.json(projects);
 })
 
 module.exports = router;

@@ -9,7 +9,8 @@ router.post('/', validateResource, (req, res) => {
 })
 
 router.get('/', (req, res) => {
-    res.json({ message: 'getting resources' });
+    const resources = Resources.getAll();
+    res.json(resources);
 })
 
 module.exports = router;
