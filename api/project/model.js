@@ -1,10 +1,8 @@
 const db = require('../../data/dbConfig.js');
 
-async function getAll() {
-    const projects = await db('projects');
-
-    // converting project_completed integers to boolean values
-    projects.forEach(element => {
+// converting project_completed values to boolean values
+function intToBoolean(array) {
+    array.forEach(element => {
         const { project_completed } = element;
         if (!project_completed) {
             element.project_completed = false;
@@ -12,8 +10,22 @@ async function getAll() {
             element.project_completed = true;
         }
     });
-    console.log(projects);
+}
+
+async function getAll() {
+    const projects = await db('projects');
+    intToBoolean(projects);
     return projects;
 }
 
-module.exports = { getAll }
+function addProject(project) {
+    return db('projects')
+        .insert(project)
+        .then(([project_id]) => {
+            return db('projects')
+                .where('project_id', project_id)
+                .first();
+        })
+}
+
+module.exports = { getAll, addProject }
