@@ -4,12 +4,13 @@ const Resources = require('./model.js');
 
 const router = express.Router();
 
-router.post('/', validateResource, (req, res) => {
-    res.json({ message: 'posting a resource' });
+router.post('/', validateResource, async (req, res) => {
+    const newResource = await Resources.addResource(req.body);
+    res.status(201).json(newResource);
 })
 
-router.get('/', (req, res) => {
-    const resources = Resources.getAll();
+router.get('/', async (req, res) => {
+    const resources = await Resources.getAll();
     res.json(resources);
 })
 

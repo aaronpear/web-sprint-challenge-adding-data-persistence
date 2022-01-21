@@ -4,12 +4,22 @@ const Tasks = require('./model.js');
 
 const router = express.Router();
 
-router.post('/', validateTask, (req, res) => {
-    res.json({ message: 'posting a task' });
+router.post('/', validateTask, async (req, res) => {
+    const newTask = await Tasks.addTask(req.body);
+
+    const { task_completed } = newTask;
+
+    if (!task_completed) {
+        newTask.task_completed = false;
+    } else if (task_completed === 1) {
+        newTask.task_completed = true;
+    }
+
+    res.status(201).json(newTask);
 })
 
-router.get('/', (req, res) => {
-    const tasks = Tasks.getAll();
+router.get('/', async (req, res) => {
+    const tasks = await Tasks.getAll();
     res.json(tasks);
 })
 

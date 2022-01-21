@@ -2,9 +2,17 @@ const db = require('../../data/dbConfig.js');
 
 async function getAll() {
     const resources = await db('resources');
-
-    console.log(resources);
     return resources;
 }
 
-module.exports = { getAll }
+async function addResource(resource) {
+    return db('resources')
+        .insert(resource)
+        .then(([resource_id]) => {
+            return db('resources')
+                .where('resource_id', resource_id)
+                .first();
+        })
+}
+
+module.exports = { getAll, addResource }
